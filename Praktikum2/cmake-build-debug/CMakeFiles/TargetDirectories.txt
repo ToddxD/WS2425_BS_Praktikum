@@ -1,0 +1,3 @@
+C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2/cmake-build-debug/CMakeFiles/bs_praktikum_2.dir
+C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
