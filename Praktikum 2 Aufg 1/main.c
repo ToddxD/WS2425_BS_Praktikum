@@ -31,6 +31,7 @@ int startProcess(char* command) {
   pid_t pid = fork(); /* Kind erzeugen */
   if (pid < 0) {
     printf("Unable to fork"); /* Fehlerbedingung */
+    errno = 10;
     return -1; /* Schleife wiederholen */
   }
 
@@ -46,6 +47,7 @@ int startProcess(char* command) {
       command[strlen(command) - 1] = '\0';
     }
     execlp(command, command, 0); /* Das Kind-Programm ausführen */
+    return -1;
   }
   return 0;
 }
@@ -69,8 +71,11 @@ int hawsh() {
     } else if (command[0] == '/') {
       chdir(command);
     } else if (strcmp(command, "") != 0) {
-      if (startProcess(command) == -1) continue;
-      if (errno != 0) return 0;
+      if (startProcess(command) == -1) {
+        strerror(errno);
+        errno = 0;
+        continue;
+      }
     } else {
       printf("Kein gültiger Command\n");
     }
