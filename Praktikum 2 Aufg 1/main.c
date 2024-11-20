@@ -72,9 +72,9 @@ int hawsh() {
       chdir(command);
     } else if (strcmp(command, "") != 0) {
       if (startProcess(command) == -1) {
-        printf("ERROR: %s", strerror(errno));
+        printf("ERROR: %s\n", strerror(errno));
         errno = 0;
-        continue;
+        return 0;
       }
     } else {
       printf("Kein gültiger Command\n");
