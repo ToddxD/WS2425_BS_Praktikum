@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2/cmake-build-debug"
+			"value" : "c:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum 2 Aufg 1/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -431,7 +431,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum 2 Aufg 1/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -503,7 +503,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2"
+			"value" : "C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum 2 Aufg 1"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1147,7 +1147,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2/cmake-build-debug"
+			"value" : "C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum 2 Aufg 1/cmake-build-debug"
 		},
 		{
 			"name" : "bs_praktikum_2_IS_TOP_LEVEL",
@@ -1171,7 +1171,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2"
+			"value" : "C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum 2 Aufg 1"
 		}
 	],
 	"kind" : "cache",

@@ -45,6 +45,7 @@ int startProcess(char* command) {
       command[strlen(command) - 1] = '\0';
     }
     execlp(command, command, 0); /* Das Kind-Programm ausführen */
+    printf("Fehler %d", errno);
   }
   return 0;
 }

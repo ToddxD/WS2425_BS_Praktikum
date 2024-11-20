@@ -1,4 +1,4 @@
-"C:\Program Files\JetBrains\CLion 2023.3.4\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2023.3.4/bin/ninja/win/x64/ninja.exe" -G Ninja -S "C:\Users\Hendrik\OneDrive\Dokumente\Hauptordner\Studium\3. Semester\BS\WS2425_BS_Praktikum\Praktikum2" -B "C:\Users\Hendrik\OneDrive\Dokumente\Hauptordner\Studium\3. Semester\BS\WS2425_BS_Praktikum\Praktikum2\cmake-build-debug"
+"C:\Program Files\JetBrains\CLion 2023.3.4\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2023.3.4/bin/ninja/win/x64/ninja.exe" -G Ninja -S "C:\Users\Hendrik\OneDrive\Dokumente\Hauptordner\Studium\3. Semester\BS\WS2425_BS_Praktikum\Praktikum 2 Aufg 1" -B "C:\Users\Hendrik\OneDrive\Dokumente\Hauptordner\Studium\3. Semester\BS\WS2425_BS_Praktikum\Praktikum 2 Aufg 1\cmake-build-debug"
 -- The C compiler identification is GNU 13.1.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
@@ -7,4 +7,4 @@
 -- Detecting C compile features - done
 -- Configuring done (1.8s)
 -- Generating done (0.0s)
--- Build files have been written to: C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum2/cmake-build-debug
+-- Build files have been written to: C:/Users/Hendrik/OneDrive/Dokumente/Hauptordner/Studium/3. Semester/BS/WS2425_BS_Praktikum/Praktikum 2 Aufg 1/cmake-build-debug
