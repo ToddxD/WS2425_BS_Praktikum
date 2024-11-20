@@ -46,7 +46,6 @@ int startProcess(char* command) {
       command[strlen(command) - 1] = '\0';
     }
     execlp(command, command, 0); /* Das Kind-Programm ausführen */
-    printf("Fehler %d", errno);
   }
   return 0;
 }
@@ -58,11 +57,8 @@ int hawsh() {
     char command[256] = {};
     char* params;
 
-    read_command(command/*, &params*/); /* Eingabezeile von Tastatur lesen */
-    //printf("Command ohne trim: %s;", command);
-    //strcspn(commmand) - trim newline
+    read_command(command); /* Eingabezeile von Tastatur lesen */
     trimString(command);
-    //printf("Command: %s;", command);
     if (strcmp(command, "quit") == 0) {
       printf("Ciao Kakao\n");
       return 0;
@@ -74,6 +70,7 @@ int hawsh() {
       chdir(command);
     } else if (strcmp(command, "") != 0) {
       if (startProcess(command) == -1) continue;
+      if (errno != 0) return 0;
     } else {
       printf("Kein gültiger Command\n");
     }
