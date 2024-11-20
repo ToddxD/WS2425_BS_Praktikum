@@ -72,7 +72,7 @@ int hawsh() {
       chdir(command);
     } else if (strcmp(command, "") != 0) {
       if (startProcess(command) == -1) {
-        strerror(errno);
+        printf("ERROR: %s", strerror(errno));
         errno = 0;
         continue;
       }
