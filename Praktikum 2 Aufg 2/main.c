@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include <string.h>
 #include <pthread.h>
 #include <sched.h>
 
-#define RUNDEN 10
+#define RUNDEN 5
 #define ANZAHL_RACER 5
+#define CRASH_FACTOR 20
 
 typedef struct Pod_Racer {
     char name[256];
@@ -15,38 +15,48 @@ typedef struct Pod_Racer {
     pthread_t thread_id;
 } Pod_Racer;
 
-volatile bool crashed = false;
+static volatile bool crashed = false;
 
 void* fliegen(void* r) {
   Pod_Racer* racer = (Pod_Racer*) r;
+
+  // Seed für Random wählen. Abhängig der aktuellen Zeit und der Thread-ID (damit Thread-Safe)
   srand(time(NULL) * racer->thread_id);
 
-  if (rand() % 2 == 0) {
-    printf("Racer %s CRASHED", racer->name);
-    crashed = true;
-  }
-
-  if (crashed) {
-    return NULL;
-  }
-
   for (int i = 0; i < RUNDEN; i++) {
-    int zeit = (rand() % 100);
+    int zeit = (rand() % 1000);
+
+    // Prüfe Crash
+    if (zeit <= CRASH_FACTOR && !crashed) {
+      crashed = true;
+      printf("Racer %s CRASHED", racer->name);
+    }
+
+    // Rundenzeit addieren
     racer->rennzeit += zeit;
     usleep(zeit * 10000);
+
+    // Beenden, wenn irgendein Pod gecrashed ist
+    if (crashed) {
+      return NULL;
+    }
+
+    printf("[debug] Racer %s ist %d Runde/n gefahren. Rundenzeit: %d, Gesamtzeit: %d\n", racer->name, i+1, zeit, racer->rennzeit);
   }
 
-  printf("Racer %s ist mit %d angekommen\n", racer->name, racer->rennzeit);
+  printf("[debug] Racer %s ist mit %d angekommen\n", racer->name, racer->rennzeit);
   return NULL;
 }
 
-void createPodProcess(Pod_Racer* racer) {
-  pthread_create(&racer->thread_id, NULL, fliegen, (void*) racer);
+void createPodProcesses(Pod_Racer racer[]) {
+  for (int i = 0; i < ANZAHL_RACER; i++) {
+    pthread_create(&(racer+i)->thread_id, NULL, fliegen, (void*) (racer+i));
+  }
 }
 
 void waitForPods(Pod_Racer racer[]) {
   for (int i = 0; i < ANZAHL_RACER; i++) {
-    pthread_join(racer->thread_id, NULL);
+    pthread_join((racer+i)->thread_id, NULL);
   }
 }
 
@@ -74,6 +84,13 @@ void sort(Pod_Racer arr[], int n){
   }
 }
 
+void printErgebnis(Pod_Racer racer[]) {
+  printf("*** Ergebnis ***\n");
+  for (int i = 0; i < ANZAHL_RACER; i++) {
+    printf("%d. Platz: Pod %s, Zeit %d ms\n", i + 1, racer[i].name, racer[i].rennzeit);
+  }
+}
+
 int main() {
   Pod_Racer racer[ANZAHL_RACER] = {
           {"Erster", 0},
@@ -83,10 +100,7 @@ int main() {
           {"Fuenfter", 0}
   };
 
-  for (int i = 0; i < ANZAHL_RACER; i++) {
-    createPodProcess(&racer[i]);
-  }
-
+  createPodProcesses(racer);
   waitForPods(racer);
 
   if (crashed) {
@@ -94,10 +108,7 @@ int main() {
   }
 
   sort(racer, ANZAHL_RACER);
-
-  for (int i = 0; i < ANZAHL_RACER; i++) {
-    printf("%d. Platz: Pod %s, Zeit %d ms\n", i + 1, racer[i].name, racer[i].rennzeit);
-  }
+  printErgebnis(racer);
 
   return 0;
 }
