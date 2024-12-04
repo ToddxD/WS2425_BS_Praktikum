@@ -1,0 +1,20 @@
+//
+// Created by Hendrik on 04.12.2024.
+//
+
+#ifndef PRAKTIKUM_3_CONSUMER_H
+#define PRAKTIKUM_3_CONSUMER_H
+
+/**
+ * Runs this thread.
+ */
+void run();
+
+/**
+ * 1. Consumes queue element in 500ms - 2000ms and frees memory.<br>
+ * 2. Blocks if queue is empty.<br>
+ * 3. Terminates after all 1000 packets have been consumed.
+ */
+void consume_queue_element();
+
+#endif //PRAKTIKUM_3_CONSUMER_H

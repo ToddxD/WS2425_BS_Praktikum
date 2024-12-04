@@ -57,7 +57,6 @@ int hawsh() {
   while (true) { /* Endlosschleife */
     prompt(); /* Prompt ausgeben */
     char command[256] = {};
-    char* params;
 
     read_command(command); /* Eingabezeile von Tastatur lesen */
     trimString(command);
@@ -67,7 +66,8 @@ int hawsh() {
     } else if(strcmp(command, "version") == 0) {
       printf("HAW Shell Version 1.0 Autor: Hendrik Pilz \n");
     } else if (strcmp(command, "help") == 0) {
-      printf("-- Die selbst programmierte HAW Shell --\n\nBefehle:\n\tversion \t Anzeige des Autors und der Versionsnummer der HAW-Shell\n\t/[Pfadname] \t Wechsel des aktuellen Arbeitsverzeichnisses. Es muss immer ein kompletter Pfadname eingegeben werden.\n\thelp \t\t Diese Hilfe-Seite\n\tquit \t\t Beendet die Shell\n----------------------------------------\n");
+      printf("-- Die selbst programmierte HAW Shell --\n\n"
+             "Befehle:\n\tversion \t Anzeige des Autors und der Versionsnummer der HAW-Shell\n\t/[Pfadname] \t Wechsel des aktuellen Arbeitsverzeichnisses. Es muss immer ein kompletter Pfadname eingegeben werden.\n\thelp \t\t Diese Hilfe-Seite\n\tquit \t\t Beendet die Shell\n----------------------------------------\n");
     } else if (command[0] == '/') {
       chdir(command);
     } else if (strcmp(command, "") != 0) {

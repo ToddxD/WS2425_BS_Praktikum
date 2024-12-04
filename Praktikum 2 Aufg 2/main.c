@@ -30,6 +30,7 @@ void* fliegen(void* r) {
     if (zeit <= CRASH_FACTOR && !crashed) {
       crashed = true;
       printf("Racer %s CRASHED", racer->name);
+      return NULL;
     }
 
     // Rundenzeit addieren
@@ -51,6 +52,7 @@ void* fliegen(void* r) {
 void createPodProcesses(Pod_Racer racer[]) {
   for (int i = 0; i < ANZAHL_RACER; i++) {
     pthread_create(&(racer+i)->thread_id, NULL, fliegen, (void*) (racer+i));
+    // Fehlerbehandlung...
   }
 }
 
