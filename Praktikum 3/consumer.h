@@ -5,10 +5,12 @@
 #ifndef PRAKTIKUM_3_CONSUMER_H
 #define PRAKTIKUM_3_CONSUMER_H
 
+#include <stdio.h>
+
 /**
  * Runs this thread.
  */
-void run();
+void* run_consumer(void* p);
 
 /**
  * 1. Consumes queue element in 500ms - 2000ms and frees memory.<br>

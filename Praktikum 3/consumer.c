@@ -4,10 +4,13 @@
 
 #include "consumer.h"
 
-int counter = 0;
+static int c_counter = 0;
 
-void run() {
+void* run_consumer(void* p) {
 
+    printf("consumer running...\n");
+
+    return NULL;
 }
 
 void consume_queue_element() {

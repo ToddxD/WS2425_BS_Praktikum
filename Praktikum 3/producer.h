@@ -5,10 +5,19 @@
 #ifndef PRAKTIKUM_3_PRODUCER_H
 #define PRAKTIKUM_3_PRODUCER_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <pthread.h>
+#include "queue.h"
+#include <unistd.h>
+#include <errno.h>
+#include "p3errno.h"
+
 /**
  * Runs this thread.
  */
-void run();
+void* run_producer(void* p);
 
 /**
  * 1. Creates and adds a random number paket (0-99) and sleeps for 200ms.<br>

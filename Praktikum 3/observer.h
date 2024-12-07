@@ -5,10 +5,14 @@
 #ifndef PRAKTIKUM_3_OBSERVER_H
 #define PRAKTIKUM_3_OBSERVER_H
 
+#include <stdio.h>
+#include "queue.h"
+#include <unistd.h>
+
 /**
  * Runs this thread.
  */
-void run();
+void* run_observer(void* p);
 
 /**
  * Prints "Ende" if all 1000 packets have been consumed.
