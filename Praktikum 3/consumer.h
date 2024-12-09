@@ -6,6 +6,9 @@
 #define PRAKTIKUM_3_CONSUMER_H
 
 #include <stdio.h>
+#include <pthread.h>
+#include "queue.h"
+#include <unistd.h>
 
 /**
  * Runs this thread.

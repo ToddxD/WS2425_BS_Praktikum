@@ -12,9 +12,13 @@ pthread_t consumer[CONSUMER_THREAD_COUNT] = {};
 pthread_t observer;
 pthread_t queue;
 
-queue_element_t queue_head  = {
+packet_t empty_packet = {
         -1,
-        PTHREAD_MUTEX_DEFAULT,
+        PTHREAD_MUTEX_DEFAULT
+};
+
+queue_element_t queue_head  = {
+        &empty_packet,
         NULL,
         NULL,
 };

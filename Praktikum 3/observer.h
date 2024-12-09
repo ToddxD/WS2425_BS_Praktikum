@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "queue.h"
 #include <unistd.h>
+#include "consumer.h"
 
 /**
  * Runs this thread.

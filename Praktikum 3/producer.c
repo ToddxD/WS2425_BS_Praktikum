@@ -4,8 +4,6 @@
 
 #include "producer.h"
 
-#define MS *100
-
 static int p_counter = 0;
 static pthread_mutex_t mp = PTHREAD_MUTEX_INITIALIZER;
 
@@ -27,15 +25,12 @@ void* run_producer(void* p) {
     return NULL;
 }
 
+static int test = 0;
+
 void create_queue_element() {
     packet_t* packet_ptr = malloc(sizeof(packet_t));
 
-    //packet_t packet = {
-    //        rand() % 100,
-    //        PTHREAD_MUTEX_INITIALIZER
-    //};
-
-    packet_ptr->num = rand() % 100;
+    packet_ptr->num = test++;//rand() % 100;
     packet_ptr->mutex = PTHREAD_MUTEX_INITIALIZER;
 
     while (add_paket(packet_ptr) < 0) {
@@ -43,5 +38,6 @@ void create_queue_element() {
             usleep(1000 MS); // ist usleep blocked oder busy?
         }
     }
+    printf("produced packet: %d\n", packet_ptr->num);
     usleep(200 MS);
 }
