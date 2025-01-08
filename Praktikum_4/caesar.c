@@ -1,6 +1,10 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/kernel.h>
+#include <linux/device.h>
+#include <linux/fs.h>
+#include <linux/uaccess.h>
+#define DEVICE_NAME "caesar"
 
 MODULE_LICENSE("Dual BSD/GPL");
 
@@ -37,21 +41,21 @@ static int dev_release(struct inode *inodep, struct file *filep){
   return 0;
 }
 
-static int caser_init(void)
+static int caesar_init(void)
 {
   majorNumber = register_chrdev(0, DEVICE_NAME, &fops);
   if (majorNumber<0){
-    printk(KERN_ALERT "caser: failed to register a major number\n");
+    printk(KERN_ALERT "caesar: failed to register a major number\n");
     return majorNumber;
   }
-  printk(KERN_INFO "caser: registered correctly with major number %d\n", majorNumber);
+  printk(KERN_INFO "caesar: registered correctly with major number %d\n", majorNumber);
   return 0;
 }
 
-static void caser_exit(void)
+static void caesar_exit(void)
 {
   printk(KERN_INFO "Goodbye, cruel world\n");
 }
 
-module_init(caser_init);
-module_exit(caser_exit);
+module_init(caesar_init);
+module_exit(caesar_exit);
