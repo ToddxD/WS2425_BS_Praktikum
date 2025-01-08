@@ -30,12 +30,17 @@ static int test = 0;
 void create_queue_element() {
     packet_t* packet_ptr = malloc(sizeof(packet_t));
 
-    packet_ptr->num = test++;//rand() % 100;
+    packet_ptr->num = rand() % 100;
     packet_ptr->mutex = PTHREAD_MUTEX_INITIALIZER;
 
     while (add_paket(packet_ptr) < 0) {
         if (errno == QUEUE_FULL) {
-            usleep(1000 MS); // ist usleep blocked oder busy?
+            usleep(1000 MS);
+
+            packet_ptr = malloc(sizeof(packet_t));
+
+            packet_ptr->num = rand() % 100;
+            packet_ptr->mutex = PTHREAD_MUTEX_INITIALIZER;
         }
     }
     printf("produced packet: %d\n", packet_ptr->num);

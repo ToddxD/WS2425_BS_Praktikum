@@ -42,6 +42,7 @@ void create_threads() {
 }
 
 void init() {
+  init_queue();
   create_threads();
 }
 
@@ -59,8 +60,8 @@ void wait_for_termination() {
 }
 
 int main() {
-  init();
-  wait_for_termination();
+    init();
+    wait_for_termination();
 
-  return 0;
+    return 0;
 }

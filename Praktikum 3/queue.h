@@ -10,9 +10,10 @@
 #include <errno.h>
 #include "p3errno.h"
 #include <stdlib.h>
+#include <semaphore.h>
 
 #define QMAX 25
-#define MAX_PACKETS 100
+#define MAX_PACKETS 20
 #define MS *1000
 
 typedef struct packet_t {
@@ -26,6 +27,8 @@ typedef struct queue_element_t {
     struct queue_element_t* prev;
 } queue_element_t;
 
+void init_queue();
+
 /**
  * Runs the queue
  */
@@ -34,9 +37,9 @@ void* run_queue(void* p);
 /**
  * Adds a packet to the queue in the correct order
  *
- * @param paket number
+ * @param packet number
  */
-int add_paket(packet_t* paket);
+int add_paket(packet_t* packet);
 
 /**
  * Returns and removes packet with smallest number.

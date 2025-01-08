@@ -35,6 +35,7 @@ void consume_queue_element() {
     if (get_paket(&packet) == 0) {
         printf("   consumed packet: %d\n", packet->num);
         usleep(time MS);
+        //pthread_mutex_destroy(&packet->mutex);
         free(packet);
     }
     // TODO waiting for not empty
