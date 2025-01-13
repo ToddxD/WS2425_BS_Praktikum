@@ -53,7 +53,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
     // Text entschlüsseln und auf den puffer legen
     printk(KERN_INFO "entschluesseln...");
   } else {
-    printk(KERN_INFO "write \d...", minor_num);
+    printk(KERN_INFO "write %d...", minor_num);
   }
 
   return len;
