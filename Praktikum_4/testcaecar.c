@@ -7,7 +7,7 @@ int main() {
 
   char buffer[0] = {};
   write(fd, buffer, 10);
-  printf("written");
+  printf("written\n");
 
   close(fd);
 
