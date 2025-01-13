@@ -47,12 +47,15 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
   unsigned int minor_num = iminor(filep->f_inode);
   if (minor_num == 0) {
     // Text verschlüsseln und auf den puffer legen
-    printk("verschluesseln...");
+    printk(KERN_INFO "verschluesseln...");
 
   } else if (minor_num == 1) {
     // Text entschlüsseln und auf den puffer legen
-    printk("entschluesseln...");
+    printk(KERN_INFO "entschluesseln...");
+  } else {
+    printk(KERN_INFO "write \d...", minor_num);
   }
+
   return len;
 }
 
