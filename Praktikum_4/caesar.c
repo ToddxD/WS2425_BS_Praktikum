@@ -5,6 +5,7 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 #define DEVICE_NAME_0 "encrypt"
+#define DEVICE_NAME_1 "decrypt"
 #define CLASS_NAME "ebb"
 
 MODULE_LICENSE("Dual BSD/GPL");
@@ -14,6 +15,7 @@ static int translate_shift = 3;
 module_param(translate_shift, int, S_IRUGO);
 static struct class*  devClass  = NULL;
 static struct device* encryptDevice = NULL;
+static struct device* decryptDevice = NULL;
 
 static int     dev_open(struct inode *, struct file *);
 static int     dev_release(struct inode *, struct file *);
@@ -69,8 +71,17 @@ static int caesar_init(void)
     printk(KERN_ALERT "Failed to create the device\n");
     return PTR_ERR(encryptDevice);
   }
-  printk(KERN_INFO "caeser: device class (encrypt) created correctly\n"); // Made it! device was initialized
+  printk(KERN_INFO "caesar: device class (encrypt) created correctly\n"); // Made it! device was initialized
 
+  decryptDevice = device_create(devClass, NULL, MKDEV(majorNumber, 1), NULL, DEVICE_NAME_1);
+  if (IS_ERR(decryptDevice)){               // Clean up if there is an error
+    class_destroy(devClass);           // Repeated code but the alternative is goto statements
+    unregister_chrdev(majorNumber, DEVICE_NAME_1);
+    printk(KERN_ALERT "Failed to create the device\n");
+    return PTR_ERR(decryptDevice);
+  }
+  printk(KERN_INFO "caesar: device class (decrypt) created correctly\n");
+  
   return 0;
 }
 
