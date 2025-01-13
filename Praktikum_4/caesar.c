@@ -86,7 +86,8 @@ static int caesar_init(void)
 }
 
 static void caesar_exit(void) {
-  device_destroy(devClass, MKDEV(majorNumber, 0));     // remove the device
+  device_destroy(devClass, MKDEV(majorNumber, 0));    // remove the device
+  device_destroy(devClass, MKDEV(majorNumber, 1));
   class_unregister(devClass);                          // unregister the device class
   class_destroy(devClass);                             // remove the device class
   unregister_chrdev(majorNumber, DEVICE_NAME_0);             // unregister the major number
