@@ -12,6 +12,8 @@ MODULE_LICENSE("Dual BSD/GPL");
 static int majorNumber;
 static int translate_shift = 3;
 module_param(translate_shift, int, S_IRUGO);
+static struct class*  devClass  = NULL;
+static struct device* encryptDevice = NULL;
 
 static int     dev_open(struct inode *, struct file *);
 static int     dev_release(struct inode *, struct file *);
