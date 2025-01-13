@@ -4,7 +4,8 @@
 #include <linux/device.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
-#define DEVICE_NAME "caesar"
+#define DEVICE_NAME_0 "encrypt"
+#define CLASS_NAME "ebb"
 
 MODULE_LICENSE("Dual BSD/GPL");
 
@@ -43,18 +44,49 @@ static int dev_release(struct inode *inodep, struct file *filep){
 
 static int caesar_init(void)
 {
-  majorNumber = register_chrdev(0, DEVICE_NAME, &fops);
+  majorNumber = register_chrdev(0, DEVICE_NAME_0, &fops);
   if (majorNumber<0){
     printk(KERN_ALERT "caesar: failed to register a major number\n");
     return majorNumber;
   }
   printk(KERN_INFO "caesar: registered correctly with major number %d\n", majorNumber);
+
+  devClass = class_create(THIS_MODULE, CLASS_NAME);
+  if (IS_ERR(devClass)){                // Check for error and clean up if there is
+    unregister_chrdev(majorNumber, DEVICE_NAME_0);
+    printk(KERN_ALERT "Failed to register device class\n");
+    return PTR_ERR(devClass);          // Correct way to return an error on a pointer
+  }
+  printk(KERN_INFO "caesar: device class registered correctly\n");
+
+  // Register the device driver
+  encryptDevice = device_create(devClass, NULL, MKDEV(majorNumber, 0), NULL, DEVICE_NAME_0);
+  if (IS_ERR(encryptDevice)){               // Clean up if there is an error
+    class_destroy(devClass);           // Repeated code but the alternative is goto statements
+    unregister_chrdev(majorNumber, DEVICE_NAME_0);
+    printk(KERN_ALERT "Failed to create the device\n");
+    return PTR_ERR(encryptDevice);
+  }
+  printk(KERN_INFO "caeser: device class (encode) created correctly\n"); // Made it! device was initialized
+
+  encryptDevice = device_create(devClass, NULL, MKDEV(majorNumber, 0), NULL, DEVICE_NAME_0);
+  if (IS_ERR(encryptDevice)){               // Clean up if there is an error
+    class_destroy(devClass);           // Repeated code but the alternative is goto statements
+    unregister_chrdev(majorNumber, DEVICE_NAME_0);
+    printk(KERN_ALERT "Failed to create the device\n");
+    return PTR_ERR(encryptDevice);
+  }
+  printk(KERN_INFO "caeser: device class (encrypt) created correctly\n"); // Made it! device was initialized
+
   return 0;
 }
 
-static void caesar_exit(void)
-{
-  printk(KERN_INFO "Goodbye, cruel world\n");
+static void caesar_exit(void) {
+  device_destroy(devClass, MKDEV(majorNumber, 0));     // remove the device
+  class_unregister(devClass);                          // unregister the device class
+  class_destroy(devClass);                             // remove the device class
+  unregister_chrdev(majorNumber, DEVICE_NAME_0);             // unregister the major number
+  printk(KERN_INFO "EBBChar: Goodbye from the LKM!\n");
 }
 
 module_init(caesar_init);
