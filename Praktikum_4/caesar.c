@@ -31,18 +31,34 @@ static struct file_operations fops =
 };
 
 static int dev_open(struct inode *inodep, struct file *filep){
+  unsigned int minor_num = iminor(inodep);
+
   return 0;
 }
 
 static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset){
+
+  // verschlüsselten oder entschlüsselten Text ausgeben
+
   return 0;
 }
 
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
+  unsigned int minor_num = iminor(filep->f_dentry->d_inode);
+  if (minor_num == 0) {
+    // Text verschlüsseln und auf den puffer legen
+    printk("verschluesseln...");
+
+  } else if (minor_num == 1) {
+    // Text entschlüsseln und auf den puffer legen
+    printk("entschluesseln...");
+  }
   return len;
 }
 
 static int dev_release(struct inode *inodep, struct file *filep){
+  unsigned int minor_num = iminor(inodep);
+
   return 0;
 }
 
