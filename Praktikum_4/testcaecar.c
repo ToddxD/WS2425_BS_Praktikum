@@ -14,6 +14,6 @@ int main() {
   printf("written: %s\n", strerror(errno));
 
   close(fd);
-
+  free(buffer);
   return 0;
 }
