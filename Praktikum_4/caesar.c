@@ -81,7 +81,7 @@ static int caesar_init(void)
     return PTR_ERR(decryptDevice);
   }
   printk(KERN_INFO "caesar: device class (decrypt) created correctly\n");
-  
+
   return 0;
 }
 
@@ -90,7 +90,8 @@ static void caesar_exit(void) {
   class_unregister(devClass);                          // unregister the device class
   class_destroy(devClass);                             // remove the device class
   unregister_chrdev(majorNumber, DEVICE_NAME_0);             // unregister the major number
-  printk(KERN_INFO "EBBChar: Goodbye from the LKM!\n");
+  unregister_chrdev(majorNumber, DEVICE_NAME_1);             // unregister the major number
+  printk(KERN_INFO "caesar: Goodbye from the LKM!\n");
 }
 
 module_init(caesar_init);
