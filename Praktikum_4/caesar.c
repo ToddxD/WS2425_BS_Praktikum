@@ -53,7 +53,7 @@ static int caesar_init(void)
   }
   printk(KERN_INFO "caesar: registered correctly with major number %d\n", majorNumber);
 
-  devClass = __class_create(THIS_MODULE, CLASS_NAME);
+  devClass = class_create(CLASS_NAME);
   if (IS_ERR(devClass)){                // Check for error and clean up if there is
     unregister_chrdev(majorNumber, DEVICE_NAME_0);
     printk(KERN_ALERT "Failed to register device class\n");
