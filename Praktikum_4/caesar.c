@@ -53,7 +53,7 @@ static int caesar_init(void)
   }
   printk(KERN_INFO "caesar: registered correctly with major number %d\n", majorNumber);
 
-  devClass = class_create(THIS_MODULE, CLASS_NAME);
+  devClass = __class_create(THIS_MODULE, CLASS_NAME);
   if (IS_ERR(devClass)){                // Check for error and clean up if there is
     unregister_chrdev(majorNumber, DEVICE_NAME_0);
     printk(KERN_ALERT "Failed to register device class\n");
@@ -62,15 +62,6 @@ static int caesar_init(void)
   printk(KERN_INFO "caesar: device class registered correctly\n");
 
   // Register the device driver
-  encryptDevice = device_create(devClass, NULL, MKDEV(majorNumber, 0), NULL, DEVICE_NAME_0);
-  if (IS_ERR(encryptDevice)){               // Clean up if there is an error
-    class_destroy(devClass);           // Repeated code but the alternative is goto statements
-    unregister_chrdev(majorNumber, DEVICE_NAME_0);
-    printk(KERN_ALERT "Failed to create the device\n");
-    return PTR_ERR(encryptDevice);
-  }
-  printk(KERN_INFO "caeser: device class (encode) created correctly\n"); // Made it! device was initialized
-
   encryptDevice = device_create(devClass, NULL, MKDEV(majorNumber, 0), NULL, DEVICE_NAME_0);
   if (IS_ERR(encryptDevice)){               // Clean up if there is an error
     class_destroy(devClass);           // Repeated code but the alternative is goto statements
