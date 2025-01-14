@@ -6,12 +6,13 @@
 #include <string.h>
 
 int main() {
-  int fd = open("/dev/decrypt", O_RDWR);
+  int fd = open("/dev/encrypt", O_RDWR);
 
   printf("open...");
   printf("%s\n", strerror(errno));
 
-  char* buf = malloc(sizeof(char));
+  char* buf = malloc(10*sizeof(char));
+  buf = "abcdefghij";
   write(fd, buf, 10);
 
   printf("write...");

@@ -7,11 +7,12 @@
 #define DEVICE_NAME_0 "encrypt"
 #define DEVICE_NAME_1 "decrypt"
 #define CLASS_NAME "ebb"
+#define BUFFER_SIZE sizeof(char) * 40
 
 MODULE_LICENSE("Dual BSD/GPL");
 
 static int majorNumber;
-static int translate_shift = 3;
+static char translate_shift = 3;
 module_param(translate_shift, int, S_IRUGO);
 static struct class*  devClass  = NULL;
 static struct device* encryptDevice = NULL;
@@ -21,6 +22,11 @@ static int     dev_open(struct inode *, struct file *);
 static int     dev_release(struct inode *, struct file *);
 static ssize_t dev_read(struct file *, char *, size_t, loff_t *);
 static ssize_t dev_write(struct file *, const char *, size_t, loff_t *);
+
+char* enc_buf;
+char* dec_buf;
+
+
 
 static struct file_operations fops =
 {
@@ -32,6 +38,8 @@ static struct file_operations fops =
 
 static int dev_open(struct inode *inodep, struct file *filep){
   unsigned int minor_num = iminor(inodep);
+  enc_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
+  dec_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
 
   return 0;
 }
@@ -39,15 +47,18 @@ static int dev_open(struct inode *inodep, struct file *filep){
 static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset){
 
   // verschlüsselten oder entschlüsselten Text ausgeben
-
+  copy_to_user(enc_buf, buffer, len);
   return 0;
 }
 
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
   unsigned int minor_num = iminor(filep->f_inode);
-
+  copy_from_user(enc_buf, buffer, len);
   if (minor_num == 0) {
     // Text verschlüsseln und auf den puffer legen
+    for(int i = 0; i<len; i++){
+      enc_buf[i] = enc_buf[i] + translate_shift;
+    }
     printk(KERN_INFO "verschluesseln...");
   } else if (minor_num == 1) {
     // Text entschlüsseln und auf den puffer legen
@@ -61,7 +72,8 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
 
 static int dev_release(struct inode *inodep, struct file *filep){
   unsigned int minor_num = iminor(inodep);
-
+  free(enc_buf);
+  free(dec_buf);
   return 0;
 }
 
