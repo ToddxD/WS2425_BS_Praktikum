@@ -155,7 +155,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
     printk(KERN_INFO "verschluesseln...");
 
   } else if (minor_num == M_DECRYPT) {
-    err = copy_from_user(enc_buf, buffer, len);
+    err = copy_from_user(dec_buf, buffer, len);
     if(err != 0){
       printk(KERN_INFO "Caesar: Fehler beim einlesen vom User");
       return -EFAULT;
