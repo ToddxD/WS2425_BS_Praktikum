@@ -54,12 +54,14 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
   unsigned int minor_num = iminor(filep->f_inode);
   copy_from_user(enc_buf, buffer, len);
+  printk(KERN_INFO "vorher: %s", enc_buf);
   if (minor_num == 0) {
     // Text verschlüsseln und auf den puffer legen
     for(int i = 0; i<len; i++){
       enc_buf[i] = enc_buf[i] + translate_shift;
     }
     printk(KERN_INFO "verschluesseln...");
+    printk(KERN_INFO "verschlusselt: %s", enc_buf);
   } else if (minor_num == 1) {
     // Text entschlüsseln und auf den puffer legen
     printk(KERN_INFO "entschluesseln...");
