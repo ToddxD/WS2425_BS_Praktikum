@@ -17,8 +17,9 @@ int main() {
   printf("write...");
   printf("%s\n", strerror(errno));
 
-  read(fd, buf, 10);
-  printf("verschluesselt: %s\n", buf);
+  char* out = malloc(sizeof(char) * 10);
+  read(fd, out, 10);
+  printf("verschluesselt: %s\n", out);
   printf("%s\n", strerror(errno));
 
   close(fd);
