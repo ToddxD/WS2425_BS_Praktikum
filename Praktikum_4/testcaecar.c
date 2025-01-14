@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <malloc.h>
+#include <string.h>
 
 int main() {
   printf("before...");
