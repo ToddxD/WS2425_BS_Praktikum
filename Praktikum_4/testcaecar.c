@@ -6,7 +6,8 @@
 #include <string.h>
 
 int main() {
-  int fd = open("/dev/encrypt", O_RDWR);
+  int fd = open("/dev/decrypt", O_RDWR);
+  //int fd = open("/dev/encrypt", O_RDWR);
 
   printf("open...");
   printf("%s\n", strerror(errno));

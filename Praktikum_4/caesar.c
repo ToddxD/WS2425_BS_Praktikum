@@ -45,17 +45,22 @@ static int dev_open(struct inode *inodep, struct file *filep){
 }
 
 static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset){
+  unsigned int minor_num = iminor(filep->f_inode);
 
-  // verschlüsselten oder entschlüsselten Text ausgeben
-  copy_to_user(buffer, enc_buf, len);
+  if (minor_num == 0) {
+    copy_to_user(buffer, enc_buf, len);
+  } else if (minor_num == 1) {
+    copy_to_user(buffer, dec_buf, len);
+  }
+
   return 0;
 }
 
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
   unsigned int minor_num = iminor(filep->f_inode);
-  copy_from_user(enc_buf, buffer, len);
-  printk(KERN_INFO "vorher: %s", enc_buf);
   if (minor_num == 0) {
+    copy_from_user(enc_buf, buffer, len);
+    printk(KERN_INFO "vorher: %s", enc_buf);
     // Text verschlüsseln und auf den puffer legen
     for(int i = 0; i<len; i++){
       enc_buf[i] = enc_buf[i] + translate_shift;
@@ -63,7 +68,12 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
     printk(KERN_INFO "verschluesseln...");
     printk(KERN_INFO "verschlusselt: %s", enc_buf);
   } else if (minor_num == 1) {
+    copy_from_user(dec_buf, buffer, len);
+    printk(KERN_INFO "vorher: %s", dec_buf);
     // Text entschlüsseln und auf den puffer legen
+    for(int i = 0; i<len; i++){
+      dec_buf[i] = dec_buf[i] - translate_shift;
+    }
     printk(KERN_INFO "entschluesseln...");
   } else {
     printk(KERN_INFO "write %d...", minor_num);
