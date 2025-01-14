@@ -7,6 +7,7 @@
 int main() {
   int fd = open("/dev/encrypt", O_NONBLOCK);
 
+  printf("opened: %s\n", strerror(errno));
 
   char* buffer = malloc(sizeof(char));
   write(fd, buffer, 10);
