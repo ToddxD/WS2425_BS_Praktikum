@@ -5,14 +5,18 @@
 #include <malloc.h>
 
 int main() {
+  printf("before...");
+  printf("%s\n", strerror(errno));
   int fd = open("/dev/encrypt", O_NONBLOCK);
 
-  printf("opened: %s\n", strerror(errno));
+  printf("open...");
+  printf("%s\n", strerror(errno));
 
   char* buf = malloc(sizeof(char));
   write(fd, buf, 10);
 
-  printf("written: %s\n", strerror(errno));
+  printf("write...");
+  printf("%s\n", strerror(errno));
 
   close(fd);
   free(buf);
