@@ -9,12 +9,12 @@ int main() {
 
   printf("opened: %s\n", strerror(errno));
 
-  char* buffer = malloc(sizeof(char));
-  write(fd, buffer, 10);
+  char* buf = malloc(sizeof(char));
+  write(fd, buf, 10);
 
   printf("written: %s\n", strerror(errno));
 
   close(fd);
-  free(buffer);
+  free(buf);
   return 0;
 }
