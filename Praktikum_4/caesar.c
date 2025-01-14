@@ -38,46 +38,6 @@ static struct file_operations fops =
   .release = dev_release,
 };
 
-static int dev_open(struct inode *inodep, struct file *filep){
-  unsigned int minor_num = iminor(inodep);
-  enc_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
-  dec_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
-
-  return 0;
-}
-
-static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset){
-  unsigned int minor_num = iminor(filep->f_inode);
-
-  if (minor_num == M_ENCRYPT) {
-    copy_to_user(buffer, enc_buf, len);
-  } else if (minor_num == M_DECRYPT) {
-    copy_to_user(buffer, dec_buf, len);
-  }
-
-  return 0;
-}
-
-static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
-  unsigned int minor_num = iminor(filep->f_inode);
-
-  if (minor_num == M_ENCRYPT) {
-    copy_from_user(enc_buf, buffer, len);
-    encrypt(enc_buf, len);
-    printk(KERN_INFO "verschluesseln...");
-
-  } else if (minor_num == M_DECRYPT) {
-    copy_from_user(dec_buf, buffer, len);
-    decrypt(dec_buf, len);
-    printk(KERN_INFO "entschluesseln...");
-
-  } else {
-    printk(KERN_INFO "nicht untersteutzte minor number: %d", minor_num);
-  }
-
-  return len;
-}
-
 void encrypt(char *buffer, size_t len) {
   for(int i = 0; i<len; i++){
     if(buffer[i] == 32){
@@ -132,6 +92,46 @@ void decrypt(char* buffer, size_t len){
 
     buffer[i] = buffer[i] - translate_shift;
   }
+}
+
+static int dev_open(struct inode *inodep, struct file *filep){
+  unsigned int minor_num = iminor(inodep);
+  enc_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
+  dec_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
+
+  return 0;
+}
+
+static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset){
+  unsigned int minor_num = iminor(filep->f_inode);
+
+  if (minor_num == M_ENCRYPT) {
+    copy_to_user(buffer, enc_buf, len);
+  } else if (minor_num == M_DECRYPT) {
+    copy_to_user(buffer, dec_buf, len);
+  }
+
+  return 0;
+}
+
+static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
+  unsigned int minor_num = iminor(filep->f_inode);
+
+  if (minor_num == M_ENCRYPT) {
+    copy_from_user(enc_buf, buffer, len);
+    encrypt(enc_buf, len);
+    printk(KERN_INFO "verschluesseln...");
+
+  } else if (minor_num == M_DECRYPT) {
+    copy_from_user(dec_buf, buffer, len);
+    decrypt(dec_buf, len);
+    printk(KERN_INFO "entschluesseln...");
+
+  } else {
+    printk(KERN_INFO "nicht untersteutzte minor number: %d", minor_num);
+  }
+
+  return len;
 }
 
 static int dev_release(struct inode *inodep, struct file *filep){
