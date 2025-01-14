@@ -11,8 +11,7 @@ int main() {
   printf("open...");
   printf("%s\n", strerror(errno));
 
-  char* buf = malloc(10*sizeof(char));
-  buf = "abcdefghij";
+  char* buf = "abcdefghij";
   write(fd, buf, 10);
 
   printf("write...");
