@@ -63,7 +63,28 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
     printk(KERN_INFO "vorher: %s", enc_buf);
     // Text verschlüsseln und auf den puffer legen
     for(int i = 0; i<len; i++){
-      enc_buf[i] = enc_buf[i] + translate_shift;
+      int offset = 0;
+      if(enc_buf[i] == 32){
+        // Leerzeichen als ursprung behandeln
+        enc_buf[i] = 96 + translate_shift;
+        continue;
+      }
+      // nicht behandelte Zeichen
+      if((enc_buf[i] < 65) || (enc_buf[i] > 90 && enc_buf[i] < 97) || (enc_buf[i] > 122)) continue;
+
+      if (enc_buf[i] + translate_shift == 91) {
+        // Leerzeichen als ergebnis behandeln
+        enc_buf[i] = 32;
+        continue;
+      } else if (enc_buf[i] + translate_shift > 90) {
+        // Großbuchstaben overflow
+        offset = 7;
+      } else if (enc_buf[i] + translate_shift > 122) {
+        // Kleinbuchstaben overflow
+        offset = -57;
+      }
+
+      enc_buf[i] = enc_buf[i] + translate_shift+ offset;
     }
     printk(KERN_INFO "verschluesseln...");
     printk(KERN_INFO "verschlusselt: %s", enc_buf);
