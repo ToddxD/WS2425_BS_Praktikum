@@ -6,13 +6,13 @@
 #include <string.h>
 
 int main() {
-  //int fd = open("/dev/decrypt", O_RDWR);
-  int fd = open("/dev/encrypt", O_RDWR);
+  int fd = open("/dev/decrypt", O_RDWR);
+  //int fd = open("/dev/encrypt", O_RDWR);
 
   printf("open...");
   printf("%s\n", strerror(errno));
 
-  char* buf = "zyx// AZXY";
+  char* buf = "CBA//cDb a";
   write(fd, buf, 10);
 
   printf("write...");
@@ -20,7 +20,7 @@ int main() {
 
   char* out = malloc(sizeof(char) * 10);
   read(fd, out, 10);
-  printf("expected: CBA//cDb a\n");
+  printf("expected: zyx// AZXY\n");
   printf("verschluesselt: %s\n", out);
   printf("%s\n", strerror(errno));
 
