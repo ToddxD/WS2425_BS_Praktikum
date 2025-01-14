@@ -12,7 +12,7 @@
 MODULE_LICENSE("Dual BSD/GPL");
 
 static int majorNumber;
-static char translate_shift = 3;
+static int translate_shift = 3;
 module_param(translate_shift, int, S_IRUGO);
 static struct class*  devClass  = NULL;
 static struct device* encryptDevice = NULL;
