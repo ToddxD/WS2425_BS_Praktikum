@@ -56,7 +56,7 @@ void encrypt(char *buffer, size_t len) {
       // Kleinbuchstaben overflow
       buffer[i] = buffer[i] + translate_shift - 58;
       continue;
-    } else if (buffer[i] + translate_shift > 90) {
+    } else if (buffer[i] + translate_shift > 90 && buffer[i] <= 90) {
       // Großbuchstaben overflow
       buffer[i] = buffer[i] + translate_shift + 5;
       continue;
@@ -84,12 +84,11 @@ void decrypt(char* buffer, size_t len){
       // Großbuchstaben underflow
       buffer[i] = buffer[i] - translate_shift + 58;
       continue;
-    } else if (buffer[i] - translate_shift < 97) {
+    } else if (buffer[i] - translate_shift < 97  && buffer[i] >= 97) {
       // Kleinbuchstaben underflow
       buffer[i] = buffer[i] - translate_shift - 5;
       continue;
     }
-
     buffer[i] = buffer[i] - translate_shift;
   }
 }
@@ -116,7 +115,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
   unsigned int minor_num = iminor(filep->f_inode);
-
+    // TODO len > 40
   if (minor_num == M_ENCRYPT) {
     copy_from_user(enc_buf, buffer, len);
     encrypt(enc_buf, len);
