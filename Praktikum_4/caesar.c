@@ -77,7 +77,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
         continue;
       } else if (enc_buf[i] + translate_shift > 122) {
         // Kleinbuchstaben overflow
-        enc_buf[i] = enc_buf[i] + translate_shift - 57;
+        enc_buf[i] = enc_buf[i] + translate_shift - 58;
         continue;
       } else if (enc_buf[i] + translate_shift > 90) {
         // Großbuchstaben overflow
