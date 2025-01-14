@@ -47,7 +47,7 @@ static int dev_open(struct inode *inodep, struct file *filep){
 static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset){
 
   // verschlüsselten oder entschlüsselten Text ausgeben
-  copy_to_user(enc_buf, buffer, len);
+  copy_to_user(buffer, enc_buf, len);
   return 0;
 }
 
