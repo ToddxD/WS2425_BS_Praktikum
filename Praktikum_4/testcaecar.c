@@ -19,6 +19,5 @@ int main() {
   printf("%s\n", strerror(errno));
 
   close(fd);
-  free(buf);
   return 0;
 }
