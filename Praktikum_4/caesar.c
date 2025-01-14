@@ -4,6 +4,7 @@
 #include <linux/device.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
+#include <linux/errno.h>
 #define DEVICE_NAME_0 "encrypt"
 #define DEVICE_NAME_1 "decrypt"
 #define CLASS_NAME "ebb"
@@ -28,7 +29,8 @@ static ssize_t dev_write(struct file *, const char *, size_t, loff_t *);
 char* enc_buf;
 char* dec_buf;
 
-
+int open_enc_dev = 0;
+int open_dec_dev = 0;
 
 static struct file_operations fops =
 {
@@ -95,19 +97,42 @@ void decrypt(char* buffer, size_t len){
 
 static int dev_open(struct inode *inodep, struct file *filep){
   unsigned int minor_num = iminor(inodep);
-  enc_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
-  dec_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
+  if (minor_num == M_ENCRYPT) {
+    if (open_enc_dev >= 1) {
+      printk(KERN_INFO "Caesar: Device ist bereits geöffnet");
+      return -EFAULT;
+    }
+    open_enc_dev++;
+    enc_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
+  }
+
+  if (minor_num == M_DECRYPT) {
+    if (open_dec_dev >= 1) {
+      printk(KERN_INFO "Caesar: Device ist bereits geöffnet");
+      return -EFAULT;
+    }
+    open_dec_dev++;
+    dec_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
+  }
 
   return 0;
 }
 
 static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset){
   unsigned int minor_num = iminor(filep->f_inode);
-
+  int err = 0;
   if (minor_num == M_ENCRYPT) {
-    copy_to_user(buffer, enc_buf, len);
+    err = copy_to_user(buffer, enc_buf, len);
+    if(err != 0){
+      printk(KERN_INFO "Caesar: fehler beim senden des Textes zum User");
+      return -EFAULT;
+    }
   } else if (minor_num == M_DECRYPT) {
-    copy_to_user(buffer, dec_buf, len);
+    err = copy_to_user(buffer, dec_buf, len);
+    if(err != 0){
+      printk(KERN_INFO "Caesar: fehler beim senden des Textes zum User");
+      return -EFAULT;
+    }
   }
 
   return 0;
@@ -115,14 +140,26 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
   unsigned int minor_num = iminor(filep->f_inode);
-    // TODO len > 40
+  int err = 0;
+  if (len > 40) {
+    return -EFAULT;
+  }
+
   if (minor_num == M_ENCRYPT) {
-    copy_from_user(enc_buf, buffer, len);
+    err = copy_from_user(enc_buf, buffer, len);
+    if(err != 0){
+      printk(KERN_INFO "Caesar: Fehler beim einlesen vom User");
+      return -EFAULT;
+    }
     encrypt(enc_buf, len);
     printk(KERN_INFO "verschluesseln...");
 
   } else if (minor_num == M_DECRYPT) {
-    copy_from_user(dec_buf, buffer, len);
+    err = copy_from_user(enc_buf, buffer, len);
+    if(err != 0){
+      printk(KERN_INFO "Caesar: Fehler beim einlesen vom User");
+      return -EFAULT;
+    }
     decrypt(dec_buf, len);
     printk(KERN_INFO "entschluesseln...");
 
@@ -135,8 +172,24 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
 
 static int dev_release(struct inode *inodep, struct file *filep){
   unsigned int minor_num = iminor(inodep);
-  kfree(enc_buf);
-  kfree(dec_buf);
+  if (minor_num == M_ENCRYPT) {
+    if (open_enc_dev <= 0) {
+      printk(KERN_INFO "Caesar: Device war nie geöffnet");
+      return -EFAULT;
+    }
+    open_enc_dev--;
+    kfree(enc_buf);
+  }
+
+  if (minor_num == M_DECRYPT) {
+    if (open_dec_dev <= 0) {
+      printk(KERN_INFO "Caesar: Device war nie geöffnet");
+      return -EFAULT;
+    }
+    open_dec_dev--;
+    kfree(dec_buf);
+  }
+
   return 0;
 }
 
