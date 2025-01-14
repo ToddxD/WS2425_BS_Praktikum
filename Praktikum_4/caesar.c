@@ -44,15 +44,11 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 }
 
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
-  printk(KERN_INFO "hallo...");
-
   unsigned int minor_num = iminor(filep->f_inode);
-  printk(KERN_INFO "minor: %d", minor_num);
 
   if (minor_num == 0) {
     // Text verschlüsseln und auf den puffer legen
     printk(KERN_INFO "verschluesseln...");
-
   } else if (minor_num == 1) {
     // Text entschlüsseln und auf den puffer legen
     printk(KERN_INFO "entschluesseln...");
