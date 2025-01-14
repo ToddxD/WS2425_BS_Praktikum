@@ -82,7 +82,7 @@ void decrypt(char* buffer, size_t len){
       // Leerzeichen als ergebnis behandeln
       buffer[i] = 32;
       continue;
-    } else if (buffer[i] - translate_shift < 65) {
+    } else if (buffer[i] - translate_shift < 65 && buffer[i] <= 90) {
       // Großbuchstaben underflow
       buffer[i] = buffer[i] - translate_shift + 58;
       continue;
