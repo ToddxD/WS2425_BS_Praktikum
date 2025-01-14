@@ -7,7 +7,7 @@
 int main() {
   printf("before...");
   printf("%s\n", strerror(errno));
-  int fd = open("/dev/encrypt", 0_RDWR);
+  int fd = open("/dev/encrypt", O_RDWR);
 
   printf("open...");
   printf("%s\n", strerror(errno));
