@@ -72,8 +72,8 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
 
 static int dev_release(struct inode *inodep, struct file *filep){
   unsigned int minor_num = iminor(inodep);
-  free(enc_buf);
-  free(dec_buf);
+  kfree(enc_buf);
+  kfree(dec_buf);
   return 0;
 }
 
