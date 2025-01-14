@@ -17,6 +17,10 @@ int main() {
   printf("write...");
   printf("%s\n", strerror(errno));
 
+  read(fd, buf, 10);
+  printf("verschluesselt: %s\n", buf);
+  printf("%s\n", strerror(errno));
+
   close(fd);
   return 0;
 }
