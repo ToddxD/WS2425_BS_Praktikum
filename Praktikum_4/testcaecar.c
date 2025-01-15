@@ -14,8 +14,8 @@ int main() {
   printf("open...");
   printf("%s\n", strerror(errno));
 
-  char* buf = "CBA//cDb a";
-  char* buf2 = "zyx// AZXY";
+  char* buf = "Kdoorckdoor!";
+  char* buf2 = "Hallo hallo!";
   write(fd, buf, 10);
   write(fd2, buf2, 10);
 
