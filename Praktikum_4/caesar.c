@@ -5,6 +5,7 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 #include <linux/errno.h>
+#include <linux/mutex.h>
 #define DEVICE_NAME_0 "encrypt"
 #define DEVICE_NAME_1 "decrypt"
 #define CLASS_NAME "ebb"
@@ -20,6 +21,8 @@ module_param(translate_shift, int, S_IRUGO);
 static struct class*  devClass  = NULL;
 static struct device* encryptDevice = NULL;
 static struct device* decryptDevice = NULL;
+static DEFINE_MUTEX(encrypt_mutex);
+static DEFINE_MUTEX(decrypt_mutex);
 
 static int     dev_open(struct inode *, struct file *);
 static int     dev_release(struct inode *, struct file *);
@@ -98,20 +101,20 @@ void decrypt(char* buffer, size_t len){
 static int dev_open(struct inode *inodep, struct file *filep){
   unsigned int minor_num = iminor(inodep);
   if (minor_num == M_ENCRYPT) {
-    if (open_enc_dev >= 1) {
-      printk(KERN_INFO "Caesar: Device ist bereits geöffnet");
-      return -EFAULT;
+    if(!mutex_trylock(&encrypt_mutex)){    /// Try to acquire the mutex (i.e., put the lock on/down)
+      /// returns 1 if successful and 0 if there is contention
+      printk(KERN_ALERT "caesar: Device in use by another process");
+      return -EBUSY;
     }
-    open_enc_dev++;
     enc_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
   }
 
   if (minor_num == M_DECRYPT) {
-    if (open_dec_dev >= 1) {
-      printk(KERN_INFO "Caesar: Device ist bereits geöffnet");
-      return -EFAULT;
+    if(!mutex_trylock(&decrypt_mutex)){    /// Try to acquire the mutex (i.e., put the lock on/down)
+      /// returns 1 if successful and 0 if there is contention
+      printk(KERN_ALERT "caesar: Device in use by another process");
+      return -EBUSY;
     }
-    open_dec_dev++;
     dec_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
   }
   return 0;
@@ -140,7 +143,7 @@ static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *of
 static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset){
   unsigned int minor_num = iminor(filep->f_inode);
   int err = 0;
-  if (len > 40) {
+  if (len > BUFFER_SIZE) {
     return -EFAULT;
   }
 
@@ -172,21 +175,13 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
 static int dev_release(struct inode *inodep, struct file *filep){
   unsigned int minor_num = iminor(inodep);
   if (minor_num == M_ENCRYPT) {
-    if (open_enc_dev <= 0) {
-      printk(KERN_INFO "Caesar: Device war nie geöffnet");
-      return -EFAULT;
-    }
-    open_enc_dev--;
     kfree(enc_buf);
+    mutex_unlock(&encrypt_mutex);
   }
 
   if (minor_num == M_DECRYPT) {
-    if (open_dec_dev <= 0) {
-      printk(KERN_INFO "Caesar: Device war nie geöffnet");
-      return -EFAULT;
-    }
-    open_dec_dev--;
     kfree(dec_buf);
+    mutex_unlock(&decrypt_mutex);
   }
 
   return 0;
@@ -194,6 +189,8 @@ static int dev_release(struct inode *inodep, struct file *filep){
 
 static int caesar_init(void)
 {
+  mutex_init(&encrypt_mutex);
+  mutex_init(&decrypt_mutex);
   majorNumber = register_chrdev(0, DEVICE_NAME_0, &fops);
   if (majorNumber<0){
     printk(KERN_ALERT "caesar: failed to register a major number\n");
@@ -237,7 +234,9 @@ static void caesar_exit(void) {
   class_unregister(devClass);                          // unregister the device class
   class_destroy(devClass);                             // remove the device class
   unregister_chrdev(majorNumber, DEVICE_NAME_0);             // unregister the major number
-  unregister_chrdev(majorNumber, DEVICE_NAME_1);             // unregister the major number
+  unregister_chrdev(majorNumber, DEVICE_NAME_1);    // unregister the major number
+  mutex_destroy(&encrypt_mutex);
+  mutex_destroy(&decrypt_mutex);
   printk(KERN_INFO "caesar: Goodbye from the LKM!\n");
 }
 
