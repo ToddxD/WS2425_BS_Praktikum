@@ -7,10 +7,9 @@
 
 int main() {
   int fd = open("/dev/decrypt", O_RDWR);
+  int fd2 = open("/dev/decrypt", O_RDWR);
   //int fd = open("/dev/encrypt", O_RDWR);
-  // TODO mehrere Testfälle mit ver- und entschlüsselung
-  // TODO Fehler beim erneuten öffnen eines Treibers überprüfen
-  // TODO Ver- unt Entschlüsselung parallel ausprobieren
+
   printf("open...");
   printf("%s\n", strerror(errno));
 
