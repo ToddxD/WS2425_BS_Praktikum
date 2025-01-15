@@ -48,7 +48,7 @@ int main() {
     char* input = malloc(sizeof(char) * 40);
     scanf("%s", input);
     if(strcmp("help", input) == 0){
-      printf("Liste der möglichen Befehle:\n "
+      printf("Liste der möglichen Befehle:\n"
              "help: Ausgabe der möglichen Befehle\n"
              "oe: Öffnen des Encrypt Devices\n"
              "od: Öffnen des Decrypt Devices\n"
@@ -88,7 +88,7 @@ int main() {
       int err;
       char* output = malloc(sizeof(char)*40);
       err = read(dec_dev, output, 40);
-      printf("Entschluesselter Text: %s\n", input);
+      printf("Entschluesselter Text: %s\n", output);
       if (err < 0) {
         printf("%s\n", strerror(errno));
       }
@@ -97,7 +97,7 @@ int main() {
       int err;
       char* output = malloc(sizeof(char)*40);
       err = read(enc_dev, output, 40);
-      printf("Verschluesselter Text: %s\n", input);
+      printf("Verschluesselter Text: %s\n", output);
       if (err < 0) {
         printf("%s\n", strerror(errno));
       }
