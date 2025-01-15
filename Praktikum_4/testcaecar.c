@@ -40,8 +40,11 @@ int main() {
   int dec_dev = 0;
   int enc_dev = 0;
 
+
+  printf("Moin! Encrypt oder Decrypt Device öffnen\n");
+
   while (1) {
-    printf("Moin! Encrypt oder Decrypt Device öffnen\n");
+    printf("Ready for Duty\n");
     char* input = malloc(sizeof(char) * 40);
     scanf("%s", input);
     if(strcmp("help", input) == 0){
@@ -55,8 +58,7 @@ int main() {
              "rd: Liest den aktuell im Decrypt Buffer gespeicherten Text aus\n"
              "ce: Schließt das Encrypt Device\n"
              "cd: Schließt das Decrypt Device\n");
-    }
-    if (strcmp("oe", input) == 0) {
+    }else if (strcmp("oe", input) == 0) {
       dec_dev = open("/dev/decrypt", O_RDWR);
       if (dec_dev < 0) {
         printf("Device konnte nicht geöffnet werden, Error: %s\n", strerror(errno));
@@ -84,18 +86,22 @@ int main() {
       }
     } else if (strcmp("rd", input) == 0) {
       int err;
-      err = read(dec_dev, input, 40);
+      char* output = malloc(sizeof(char)*40);
+      err = read(dec_dev, output, 40);
       printf("Entschluesselter Text: %s\n", input);
       if (err < 0) {
         printf("%s\n", strerror(errno));
       }
+      free(output);
     } else if (strcmp("re", input) == 0) {
       int err;
-      err = read(enc_dev, input, 40);
+      char* output = malloc(sizeof(char)*40);
+      err = read(enc_dev, output, 40);
       printf("Verschluesselter Text: %s\n", input);
       if (err < 0) {
         printf("%s\n", strerror(errno));
       }
+      free(output);
     } else if (strcmp("ce", input) == 0) {
       int err = close(dec_dev);
       if (err < 0) {
