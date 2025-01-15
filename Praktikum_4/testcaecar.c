@@ -7,6 +7,7 @@
 
 int main() {
   int fd = open("/dev/decrypt", O_RDWR);
+  printf("%s\n", strerror(errno));
   int fd2 = open("/dev/decrypt", O_RDWR);
   //int fd = open("/dev/encrypt", O_RDWR);
 
