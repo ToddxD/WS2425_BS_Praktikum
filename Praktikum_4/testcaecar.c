@@ -41,7 +41,7 @@ int main() {
   int enc_dev = 0;
 
   while (1) {
-    printf("Moin! Encrypt oder Decrypt Device öffnen");
+    printf("Moin! Encrypt oder Decrypt Device öffnen\n");
     char* input = malloc(sizeof(char) * 40);
     scanf("%s", input);
     if(strcmp("help", input)){
