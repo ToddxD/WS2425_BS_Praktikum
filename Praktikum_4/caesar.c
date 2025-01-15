@@ -114,7 +114,6 @@ static int dev_open(struct inode *inodep, struct file *filep){
     open_dec_dev++;
     dec_buf = kmalloc(BUFFER_SIZE, GFP_KERNEL);
   }
-
   return 0;
 }
 
