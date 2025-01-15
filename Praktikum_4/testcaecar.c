@@ -16,16 +16,16 @@ int main() {
 
   char* buf = "Kdoorckdoor!";
   char* buf2 = "Hallo hallo!";
-  write(fd, buf, 10);
-  write(fd2, buf2, 10);
+  write(fd, buf, 40);
+  write(fd2, buf2, 40);
 
   printf("write...");
   printf("%s\n", strerror(errno));
 
-  char* out = malloc(sizeof(char) * 10);
-  char* out2 = malloc(sizeof(char) * 10);
-  read(fd, out, 10);
-  read(fd2, out2, 10);
+  char* out = malloc(sizeof(char) * 40);
+  char* out2 = malloc(sizeof(char) * 40);
+  read(fd, out, 40);
+  read(fd2, out2, 40);
   printf("expectedDec: zyx// AZXY\n");
   printf("verschluesselt: %s\n", out);
   printf("expectedEnc: CBA//cDb a\n");
