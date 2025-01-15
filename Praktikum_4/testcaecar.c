@@ -9,6 +9,7 @@
 
 int main() {
   int fd = open("/dev/decrypt", O_RDWR);
+  int fd3 = open("/dev/decrypt", O_RDWR);
   int fd2 = open("/dev/encrypt", O_RDWR);
 
   printf("open...");
