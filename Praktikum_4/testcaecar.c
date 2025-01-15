@@ -44,7 +44,7 @@ int main() {
     printf("Moin! Encrypt oder Decrypt Device öffnen\n");
     char* input = malloc(sizeof(char) * 40);
     scanf("%s", input);
-    if(strcmp("help", input)){
+    if(strcmp("help", input) == 0){
       printf("Liste der möglichen Befehle:\n "
              "help: Ausgabe der möglichen Befehle\n"
              "oe: Öffnen des Encrypt Devices\n"
@@ -56,25 +56,25 @@ int main() {
              "ce: Schließt das Encrypt Device\n"
              "cd: Schließt das Decrypt Device\n");
     }
-    if (strcmp("oe", input)) {
+    if (strcmp("oe", input) == 0) {
       dec_dev = open("/dev/decrypt", O_RDWR);
       if (dec_dev < 0) {
         printf("Device konnte nicht geöffnet werden, Error: %s\n", strerror(errno));
       }
-    } else if (strcmp("od", input)) {
+    } else if (strcmp("od", input) == 0) {
       enc_dev = open("/dev/encrypt", O_RDWR);
       if (enc_dev < 0) {
         printf("Device konnte nicht geöffnet werden, Error: %s\n", strerror(errno));
       }
-    } else if (strcmp("wd", input)) {
+    } else if (strcmp("wd", input) == 0) {
       printf("Gib den Text zum entschluesseln an:\n");
       scanf("%s", input);
       int err;
       err = write(dec_dev, input, 40);
       if (err < 0) {
-        printf("%s\n", strerror(errno));
+        printf("%s", strerror(errno));
       }
-    } else if (strcmp("we", input)) {
+    } else if (strcmp("we", input) == 0) {
       printf("Gib den Text zum verschluesseln an:\n");
       scanf("%s", input);
       int err;
@@ -82,26 +82,26 @@ int main() {
       if (err < 0) {
         printf("%s\n", strerror(errno));
       }
-    } else if (strcmp("rd", input)) {
+    } else if (strcmp("rd", input) == 0) {
       int err;
       err = read(dec_dev, input, 40);
       printf("Entschluesselter Text: %s\n", input);
       if (err < 0) {
         printf("%s\n", strerror(errno));
       }
-    } else if (strcmp("re", input)) {
+    } else if (strcmp("re", input) == 0) {
       int err;
       err = read(enc_dev, input, 40);
       printf("Verschluesselter Text: %s\n", input);
       if (err < 0) {
         printf("%s\n", strerror(errno));
       }
-    } else if (strcmp("ce", input)) {
+    } else if (strcmp("ce", input) == 0) {
       int err = close(dec_dev);
       if (err < 0) {
         printf("%s\n", strerror(errno));
       }
-    } else if (strcmp("cd", input)) {
+    } else if (strcmp("cd", input) == 0) {
       int err = close(enc_dev);
       if (err < 0) {
         printf("%s\n", strerror(errno));
